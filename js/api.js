@@ -1,111 +1,117 @@
-// console.log('api.js');
-/* fetch('https://openapi.programming-hero.com/api/videos/categories')
-.then(res => res.json())
-.then(data => console.log(data)); */
-
-const loadBtn = async () => {
+const loadCategory = async () => {
 
     const res = await fetch('https://openapi.programming-hero.com/api/videos/categories');
-
-    const data = await res.json();
-    // console.log(data.data);
-    btns = data.data;
-
-    const BtnDiv = document.getElementById('category-btn');
-
-    console.log(btns);
-    displayBtn(btns);
-    ReturnCategoryId(btns);
-}
-
-
-const loadCard = async () => {
-    const res = await fetch('https://openapi.programming-hero.com/api/videos/category/1000');
-
     const data = await res.json();
 
-    const cardData = data.data;
-    const cardPostDateMap = data.data.map(returnFunction);
+    const categoryData = data.data;
 
-    // console.log(data.data);
-    console.log(cardPostDateMap);
-    
-    displayCards(cardData);
-
-}
-
-loadCard();
-
-const displayBtn = (buttons) => {
-
-    const BtnDiv = document.getElementById('category-btn');
-
-    for (const button of buttons) {
-        // console.log(button);
-
-        const btns = document.createElement('button');
-        btns.innerHTML = `<button onclick="ReturnCategoryId(${buttons.category_id})" class="btn mr-2 hover:bg-red-500 hover:text-white">${button.category}</button>`;
-        BtnDiv.appendChild(btns);
-    }
-
-}
-
-
-
-const displayCards = (cardData) => {
-
-    cardData.forEach(card => {
-
-        const categoryCard = document.getElementById('empty-div')
-        // console.log(categoryCard);
-
-
-        // console.log(card.authors[0].profile_picture);
-
-        const cardDiv = document.createElement('div');
-
-        // const timeField = document.getElementById('posted-date');
-        // console.log(timeField.innerText);
-
-
-        cardDiv.innerHTML = `
-        <div class="card bg-gray-100 shadow-xl my-2">
-                <figure class="w- mx-auto"><img class="min-w-full h-40" src="${card.thumbnail}" alt="Shoes" />
-
-                </figure>
-                <div class="relative">
-                <div class="absolute bottom-0 right-0  bg-black text-white">
-                    <p id="posted-date">${card?.others?.posted_date}</p>
-                </div>
-                </div>
-                
-                <div class="card-body my-3">
-                    <div class="flex gap-3">
-                        <img class="w-10 h-10 rounded-full" src="${card?.authors[0]?.profile_picture}" alt="">
-                        <h2 class="card-title">${card?.title}</h2>
-                    </div>
-                    <div class="flex">
-                        <p>${card?.authors[0]?.profile_name}
-                            ${card?.authors[0]?.verified || ''}</p>
-                    </div>
-                    <p>${card?.others?.views}</p>
-                </div>
-            </div>
-                  `;
-
-        categoryCard.appendChild(cardDiv);
+    const tabContainer = document.getElementById('category-tab');
+    categoryData.forEach((category) => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+        <a onclick="handleLoadCategory('${category?.category_id}')" class="tab text-black btn mr-2 hover:bg-red-500 hover:text-white">${category.category}</a>
+        `;
+        tabContainer.appendChild(div);
 
     });
+    // console.log(data.data);
+
+};
+
+const handleLoadCategory = async (categoryId) => {
+    // console.log(categoryId.data);
+
+    const res = await fetch(`https://openapi.programming-hero.com/api/videos/category/${categoryId}`);
+    const idData = await res.json();
+
+    // console.log(idData.data.length);
+
+    const cardContainer = document.getElementById('category-cards');
+    cardContainer.textContent = '';
+    const emptyDiv = document.getElementById('empty-div');
+    emptyDiv.textContent = '';
+
+    if (idData.data.length === 0) {
+
+
+        const Div = document.createElement('div');
+        Div.innerHTML = `
+        <div class="my-9">
+                    <div class="flex justify-center items-center">
+                        <img src="image/Icon.png" alt="">
+                    </div>
+                    <div class="text-center">
+                    <h3 class="text-5xl">Oops!! Sorry, There is no content here</h3>
+                    </div>
+                </div>
+
+        `;
+
+        emptyDiv.appendChild(Div);
+    }
+    else {
+        // const cardContainer = document.getElementById('category-cards');
+        // console.log(cardContainer);
+
+        // cardContainer.textContent = '';
+
+        idData.data.forEach((card) => {
+            let duration = card?.others?.posted_date;
+
+            // console.log(card.others.posted_date);
+
+
+            if (duration > 0) {
+
+                const hourInFloat = duration/3600;
+                const hour = parseInt(hourInFloat);
+                const restMinutes = duration%3600;
+                const minInFloat = restMinutes/60;
+                const minutes = parseInt(minInFloat);
+                const hrs = 'hrs ';
+                const minAgo = 'min ago';
+                duration = hour + hrs + minutes + minAgo;
+
+            }
+
+
+            const cardDiv = document.createElement('div');
+            cardDiv.innerHTML = `
+        <div class="card h-96 bg-gray-100 shadow-xl my-2">
+                    <figure class="w- mx-auto"><img class="min-w-full h-40" src="${card.thumbnail}" alt="Shoes" />
+    
+                    </figure>
+                    <div class="relative">
+                    <div class="absolute rounded-lg p-1 bottom-0 right-2 bg-black text-white">
+                        <p id="posted-date">${duration}</p>
+                    </div>
+                    </div>
+                    
+                    <div class="card-body my-3">
+                        <div class="flex gap-3">
+                            <img class="w-10 h-10 rounded-full" src="${card?.authors[0]?.profile_picture}" alt="">
+                            <h2 class="card-title">${card?.title}</h2>
+                        </div>
+                        <div class="flex">
+                            <p>${card?.authors[0]?.profile_name}
+                                ${card?.authors[0]?.verified ?
+                    '<i class="bg-blue-600 p-1 text-white rounded-full fa-solid fa-check"></i>' : ''}</p>
+                        </div>
+                        <p>${card?.others?.views}</p>
+                    </div>
+                </div>
+
+        `;
+            cardContainer.appendChild(cardDiv);
+
+
+        });
+
+    }
+
+
+
+
 }
-
-const returnFunction = (num) =>{
-
-    const timeFist = num?.others?.posted_date;
-    const timeHour = timeFist/60;
-    const timeMin = timeHour / 60;
-    return [timeHour,timeMin];
-
-}
-
-// displayBtn();
-loadBtn();
+loadCategory();
+handleLoadCategory('1000');
