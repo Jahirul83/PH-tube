@@ -37,7 +37,7 @@ const handleLoadCategory = async (categoryId) =>{
 
         const cardDiv = document.createElement('div');
         cardDiv.innerHTML = `
-        <div class="card bg-gray-100 shadow-xl my-2">
+        <div class="card h-96 bg-gray-100 shadow-xl my-2">
                     <figure class="w- mx-auto"><img class="min-w-full h-40" src="${card.thumbnail}" alt="Shoes" />
     
                     </figure>
@@ -54,7 +54,8 @@ const handleLoadCategory = async (categoryId) =>{
                         </div>
                         <div class="flex">
                             <p>${card?.authors[0]?.profile_name}
-                                ${card?.authors[0]?.verified? 'icon':''}</p>
+                                ${card?.authors[0]?.verified? 
+                                    '<i class="bg-blue-600 p-1 text-white rounded-full fa-solid fa-check"></i>':''}</p>
                         </div>
                         <p>${card?.others?.views}</p>
                     </div>
