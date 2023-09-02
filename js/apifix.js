@@ -30,9 +30,9 @@ const handleLoadCategory = async (categoryId) => {
     cardContainer.textContent = '';
     const emptyDiv = document.getElementById('empty-div');
     emptyDiv.textContent = '';
-    
+
     if (idData.data.length === 0) {
-        
+
 
         const Div = document.createElement('div');
         Div.innerHTML = `
@@ -56,7 +56,24 @@ const handleLoadCategory = async (categoryId) => {
         // cardContainer.textContent = '';
 
         idData.data.forEach((card) => {
-            // console.log(card);
+            let duration = card?.others?.posted_date;
+
+            // console.log(card.others.posted_date);
+
+
+            if (duration > 0) {
+
+                const hourInFloat = duration/3600;
+                const hour = parseInt(hourInFloat);
+                const restMinutes = duration%3600;
+                const minInFloat = restMinutes/60;
+                const minutes = parseInt(minInFloat);
+                const hrs = 'hrs ';
+                const minAgo = 'min ago';
+                duration = hour + hrs + minutes + minAgo;
+
+            }
+
 
             const cardDiv = document.createElement('div');
             cardDiv.innerHTML = `
@@ -66,7 +83,7 @@ const handleLoadCategory = async (categoryId) => {
                     </figure>
                     <div class="relative">
                     <div class="absolute rounded-lg p-1 bottom-0 right-2 bg-black text-white">
-                        <p id="posted-date">${card?.others?.posted_date}</p>
+                        <p id="posted-date">${duration}</p>
                     </div>
                     </div>
                     
