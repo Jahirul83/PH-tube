@@ -104,7 +104,7 @@ const handleLoadCategory = async (categoryId) => {
                                 ${card?.authors[0]?.verified ?
                     '<i class="bg-blue-600 p-1 text-white rounded-full fa-solid fa-check"></i>' : ''}</p>
                         </div>
-                        <p>${card?.others?.views}</p>
+                        <p>${card?.others?.views} views</p>
                     </div>
                 </div>
 
@@ -198,7 +198,7 @@ const sortbyView = async () => {
                                 ${card?.authors[0]?.verified ?
                 '<i class="bg-blue-600 p-1 text-white rounded-full fa-solid fa-check"></i>' : ''}</p>
                         </div>
-                        <p>${card?.others?.views}</p>
+                        <p>${card?.others?.views} views</p>
                     </div>
                 </div>
 
