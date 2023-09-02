@@ -56,7 +56,7 @@ const displayCards = (cardData) => {
 
     cardData.forEach(card => {
 
-        const categoryCard = document.getElementById('category-cards')
+        const categoryCard = document.getElementById('empty-div')
         // console.log(categoryCard);
 
 
